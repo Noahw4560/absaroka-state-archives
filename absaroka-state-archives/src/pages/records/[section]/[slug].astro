@@ -1,0 +1,43 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { render } from 'astro:content';
+import { SECTION_TITLES, SECTIONS, allRecords, recordLink, STATUS_LABELS, withBase } from '../../../lib/records';
+export async function getStaticPaths() {
+  const records = await allRecords();
+  return records.map(({section,entry})=>({params:{section,slug:entry.id},props:{section,entry}}));
+}
+const { section, entry } = Astro.props;
+const { Content } = await render(entry);
+const relatedIds = entry.data.related || [];
+const all = await allRecords();
+const related = relatedIds.map((id: string) => all.find(({entry:e})=>e.id===id)).filter(Boolean);
+const image = entry.data.image ? withBase(entry.data.image) : null;
+---
+<SiteLayout title={entry.data.title} description={entry.data.summary}>
+  <div class="container">
+    <div class="article-layout">
+      <article class="article-main" data-pagefind-body>
+        <div class="breadcrumb"><a href={withBase('/')}>Front page</a> / <a href={withBase('/archive/')}>Record index</a> / {SECTION_TITLES[section]}</div>
+        <div class="story-meta">{SECTION_TITLES[section]} • {entry.data.dateLabel}</div>
+        <h1 class="article-title" data-pagefind-meta="title">{entry.data.title}</h1>
+        <p class="article-dek" data-pagefind-meta="description">{entry.data.summary}</p>
+        <div class="article-meta"><span>{STATUS_LABELS[entry.data.recordStatus]}</span>{entry.data.location && <span>{entry.data.location}</span>}{entry.data.affiliation && <span>{entry.data.affiliation}</span>}</div>
+        {image && <figure class="source-figure"><a href={image} target="_blank" rel="noopener noreferrer" aria-label="Open original image"><img src={image} alt={`Archived image: ${entry.data.title}`} /></a><figcaption>Archived image · Open to view at full resolution</figcaption></figure>}
+        <div class="prose"><Content /></div>
+        {entry.data.sourceTitle && <div class="callout"><strong>Source identification</strong><p>{entry.data.sourceTitle}{entry.data.sourceUrl && <Fragment> · <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer">External reference ↗</a></Fragment>}</p></div>}
+        <div class="callout"><strong>Reading the record</strong><p>An archive item can establish that a statement was published without establishing that every allegation within it is accurate. Source status describes the record, not necessarily the truth of its claims.</p></div>
+      </article>
+      <aside class="article-side">
+        <h3>Document particulars</h3>
+        <div class="side-info"><span>Archive section</span><strong>{SECTION_TITLES[section]}</strong></div>
+        <div class="side-info"><span>Recorded date</span><strong>{entry.data.dateLabel}</strong></div>
+        <div class="side-info"><span>Source classification</span><strong>{STATUS_LABELS[entry.data.recordStatus]}</strong></div>
+        {entry.data.office && <div class="side-info"><span>Office / title</span><strong>{entry.data.office}</strong></div>}
+        {entry.data.affiliation && <div class="side-info"><span>Affiliation</span><strong>{entry.data.affiliation}</strong></div>}
+        {entry.data.tags.length > 0 && <Fragment><h3 style="margin-top:22px">Index terms</h3><div style="display:flex;gap:7px;flex-wrap:wrap">{entry.data.tags.map((t:string)=><span class="tag">{t}</span>)}</div></Fragment>}
+        {related.length > 0 && <Fragment><h3 style="margin-top:24px">Related documents</h3><ul class="related-links">{related.map((r:any)=><li><a href={recordLink(r.section,r.entry.id)}>{r.entry.data.title} →</a></li>)}</ul></Fragment>}
+        <a class="pill" style="margin-top:24px" href={withBase('/archive/')}>← Back to record index</a>
+      </aside>
+    </div>
+  </div>
+</SiteLayout>

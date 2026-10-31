@@ -1,0 +1,11 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { withBase } from '../lib/records';
+---
+<SiteLayout title="Full-text search"><PageHeading kicker="The index" title="Search the archives" description="Search the full text of biographies, documents, legislative records, and historical events—not just their titles."/>
+<div class="container"><div class="search-area"><div id="search"></div><noscript>Search requires JavaScript. The <a href={withBase('/archive/')}>record index</a> is available without it.</noscript><p class="micro" style="color:var(--muted);margin-top:20px">Search becomes available after the first production build. It is not indexed during Astro's local development server.</p></div></div>
+<link rel="stylesheet" href={withBase('/pagefind/pagefind-ui.css')} />
+<script is:inline src={withBase('/pagefind/pagefind-ui.js')}></script>
+<script is:inline>document.addEventListener('DOMContentLoaded',()=>{if(window.PagefindUI){new window.PagefindUI({element:'#search',showSubResults:true,resetStyles:false});}else{document.getElementById('search').textContent='Search index not yet generated. Run npm run build and preview the production site.'}})</script>
+</SiteLayout>

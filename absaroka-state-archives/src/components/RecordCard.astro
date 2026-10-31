@@ -1,0 +1,14 @@
+---
+import { recordLink, STATUS_LABELS, withBase } from '../lib/records';
+const { section, entry } = Astro.props;
+const link = recordLink(section, entry.id);
+---
+<article class="record-card" data-pagefind-ignore>
+  {entry.data.image && <a href={link}><img src={withBase(entry.data.image)} alt={`Source illustration for ${entry.data.title}`} loading="lazy" /></a>}
+  <div class="card-content">
+    <div class="story-meta">{entry.data.dateLabel} · {section === 'people' ? 'Profile' : section === 'publications' ? 'Publication' : section}</div>
+    <h3 class="card-title"><a href={link}>{entry.data.title}</a></h3>
+    <p>{entry.data.summary}</p>
+    <div class="card-bottom"><span class={`status ${entry.data.recordStatus}`}>{STATUS_LABELS[entry.data.recordStatus]}</span><a href={link}>Open record →</a></div>
+  </div>
+</article>

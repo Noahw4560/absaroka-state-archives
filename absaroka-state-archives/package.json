@@ -1,0 +1,20 @@
+{
+  "name": "absaroka-state-archives",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.16.0"
+  },
+  "devDependencies": {
+    "pagefind": "^1.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

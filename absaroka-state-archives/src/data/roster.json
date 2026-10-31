@@ -1,0 +1,14 @@
+{
+  "snapshot": "November 1, 1921",
+  "note": "Dated government roster, not a claim about who held each position in 1922 or 1923. Offices may have changed.",
+  "sections": [
+    { "name": "Executive", "offices": [{"office":"Governor","holder":"James Cooper"},{"office":"Lieutenant Governor","holder":"Scott Adams"},{"office":"Attorney General","holder":"Calvin Candie"},{"office":"State Comptroller","holder":"Edward Moore"}] },
+    { "name": "Judicial", "offices": [{"office":"Chief Justice","holder":"Jayden Wesley"},{"office":"Chief Judge","holder":"Daniel Morrell"}] },
+    { "name": "State Senate", "offices": [{"office":"District I — Industrial","holder":"Cornelius Wiliford Hackney"},{"office":"District II — Agricultural","holder":"Henry James Caldwell"},{"office":"District III — Frontier","holder":"Xavier Woods"},{"office":"District IV — New Austin","holder":"Henry Whitcombe"}] },
+    { "name": "Lemoyne", "offices": [{"office":"Sheriff","holder":"Timo Coreleone"},{"office":"Mayor of Saint Denis","holder":"Theodore Beaumont"},{"office":"Mayor of Rhodes","holder":"Guthrie McKinley"}] },
+    { "name": "New Hanover", "offices": [{"office":"Sheriff","holder":"Austin Montgomery"},{"office":"Mayor of Valentine","holder":"Joseph Carter"},{"office":"Annesburg President","holder":"Ethaniel Jameson"}] },
+    { "name": "West Elizabeth", "offices": [{"office":"Sheriff","holder":"Clyde Enfield"},{"office":"Mayor of Blackwater","holder":"Maxine Waters"},{"office":"Mayor of Strawberry","holder":"Henry Too-Woo"}] },
+    { "name": "New Austin", "offices": [{"office":"County official (title uncertain)","holder":"Paul Blart"},{"office":"Mayor of Tumbleweed","holder":"Vacant"},{"office":"Mayor of Armadillo","holder":"Vacant"}] },
+    { "name": "Ambarino", "offices": [{"office":"Mayor of Nordheim","holder":"Vacant"}] }
+  ]
+}

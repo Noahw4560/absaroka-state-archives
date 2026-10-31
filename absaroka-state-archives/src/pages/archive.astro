@@ -1,0 +1,31 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { allRecords, SECTION_TITLES, STATUS_LABELS, recordLink } from '../lib/records';
+const records = await allRecords();
+---
+<SiteLayout title="Record index">
+<PageHeading title="The record index" kicker="All collections" description="Original publications, political figures, organizations, legislation, and events. Filter this index or use full-text search to examine the underlying documents." />
+<section class="section"><div class="container">
+  <div class="directory-toolbar">
+    <input id="filter-text" class="search-input" type="search" placeholder="Filter titles, people, places or subjects…" aria-label="Filter archive entries" />
+    <select id="filter-section" class="filter-select" aria-label="Record type"><option value="all">All record types</option><option value="people">People</option><option value="organizations">Organizations</option><option value="publications">Publications</option><option value="legislation">Legislation</option><option value="events">Events</option></select>
+    <select id="filter-status" class="filter-select" aria-label="Evidence type"><option value="all">All evidence types</option><option value="official">Official records</option><option value="documented">Source documents</option><option value="attributed">Attributed claims</option><option value="unverified">Disputed records</option><option value="proposed">Proposals</option></select>
+  </div>
+  <p class="micro" style="color:var(--muted)"><span id="result-count">{records.length}</span> archive entries</p>
+  <div id="record-list">
+  {records.map(({section,entry}) => <article class="archive-row" data-category={section} data-status={entry.data.recordStatus} data-search={[entry.data.title,entry.data.summary,entry.data.location,entry.data.affiliation,...entry.data.tags].filter(Boolean).join(' ').toLowerCase()}>
+    <div class="record-date">{entry.data.dateLabel}<div style="margin-top:5px;color:var(--muted)">{SECTION_TITLES[section]}</div></div>
+    <div><h3><a href={recordLink(section,entry.id)}>{entry.data.title}</a></h3><p>{entry.data.summary}</p></div>
+    <div class="archive-end">{STATUS_LABELS[entry.data.recordStatus]}</div>
+  </article>)}
+  </div>
+  <div class="empty-state" id="no-results">No matching entries. Try another term or use <a href="../search/">full-text search</a>.</div>
+</div></section>
+<script is:inline>
+  const text=document.getElementById('filter-text'),category=document.getElementById('filter-section'),status=document.getElementById('filter-status'),rows=[...document.querySelectorAll('.archive-row')];
+  function apply(){let n=0;const term=(text.value||'').toLowerCase().trim();for(const row of rows){const show=(!term||row.dataset.search.includes(term))&&(category.value==='all'||row.dataset.category===category.value)&&(status.value==='all'||row.dataset.status===status.value);row.hidden=!show;if(show)n++}document.getElementById('result-count').textContent=n;document.getElementById('no-results').style.display=n?'none':'block'}
+  [text,category,status].forEach(el=>el.addEventListener('input',apply));
+</script>
+<style>.archive-row[hidden]{display:none!important}</style>
+</SiteLayout>

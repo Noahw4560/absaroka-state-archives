@@ -1,0 +1,15 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { withBase } from '../lib/records';
+---
+<SiteLayout title="About the archive"><PageHeading kicker="Editorial standards" title="About this register" description="How the archive preserves sources, verifies chronology, and distinguishes political claims from established events." />
+<section class="section"><div class="container" style="max-width:830px"><div class="prose">
+<h2>A public record of a fictional state</h2><p>The Absaroka State Archives is a fan-made website documenting the government, politics and historical roleplay of Absaroka, a fictional American state in a RedM community. It is not affiliated with any actual government.</p>
+<h2>Records are not verdicts</h2><p>Official records are dated snapshots. A published political statement proves that someone said something; it does not prove every allegation in the statement. Newspaper articles are identified as reports, and unverified claims are labeled rather than repeated as fact.</p>
+<h2>Dates and changes</h2><p>The archive distinguishes in-character event dates from later publication dates. When the record contains inconsistent dates or unknown successors, the uncertainty is retained. New records do not silently rewrite historical officeholders.</p>
+<h2>Use the editor</h2><p>The site is maintained through GitHub and <a href="https://app.pagescms.org/" target="_blank" rel="noopener noreferrer">Pages CMS</a>. Only the repository owner and authorized editors can add or change entries. New files and media are saved to the repository; GitHub Actions rebuilds the public site.</p>
+<h2>Source materials</h2><p>The initial collection contains selected originals supplied by the project owner, including official-style statements, political posters, letters, and chronological summaries. It is a sample initial collection, not a complete ingestion of every historical Discord message.</p>
+</div><div class="callout"><strong>Corrections & additions</strong><p>Editors should keep original images, credit the source, identify the in-character date as accurately as possible, and mark allegations or unknown details explicitly. Avoid publishing real-world private information from players.</p></div>
+<a class="pill" href={withBase('/archive/')}>Browse archive →</a></div></section>
+</SiteLayout>

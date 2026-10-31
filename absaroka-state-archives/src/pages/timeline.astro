@@ -1,0 +1,8 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { recordsFor, recordLink } from '../lib/records';
+const entries=(await recordsFor('events')).slice().sort((a,b)=>(a.data.sortDate||'').localeCompare(b.data.sortDate||''));
+---
+<SiteLayout title="Historical timeline"><PageHeading kicker="Chronology" title="A state in motion" description="A timeline of documented events. Dates are displayed with their original precision; do not infer a particular day from a month-only source." />
+<section class="section"><div class="container"><ol class="timeline">{entries.map(e=><li><time>{e.data.dateLabel}</time><h3><a href={recordLink('events',e.id)}>{e.data.title}</a></h3><p>{e.data.summary}</p></li>)}</ol></div></section></SiteLayout>

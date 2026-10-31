@@ -1,0 +1,17 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import roster from '../data/roster.json';
+import { recordsFor, recordLink, withBase } from '../lib/records';
+const people=await recordsFor('people');
+function personLink(holder:string){const found=people.find(e=>e.data.title.toLowerCase()===holder.toLowerCase());return found ? recordLink('people',found.id):null}
+---
+<SiteLayout title="Government roster">
+<PageHeading kicker="The governing state" title="The offices of Absaroka" description="An annotated historical government roster with Senate districts, executive positions and municipal officeholders. This is a dated snapshot—not the current roster for every roleplay year." />
+<section class="section"><div class="container">
+<div class="callout"><strong>Snapshot date: {roster.snapshot}</strong><p>{roster.note} To add another historical officeholder, create a person profile and update the roster in Pages CMS. Retain previous snapshots rather than deleting history.</p></div>
+{roster.sections.map(section=><div style="margin:31px 0"><div class="section-title"><h2>{section.name}</h2></div><table class="roster-table"><thead><tr><th scope="col">Office</th><th scope="col">Officeholder</th></tr></thead><tbody>{section.offices.map(row=><tr><td>{row.office}</td><td>{personLink(row.holder)?<a href={personLink(row.holder)!}>{row.holder}</a>:row.holder}</td></tr>)}</tbody></table></div>)}
+<div class="callout"><strong>How Senate records work</strong><p>The supplied Senate Manual requires a three-fourths vote of active senators to pass legislation. Senators may initiate hearings and impeachment articles through the legislative forums. Some procedures (such as tie-breaking and effective dates) are ambiguous; see the relevant legislation records.</p></div>
+<a class="pill" href={withBase('/legislation/')}>Browse legislative index →</a>
+</div></section>
+</SiteLayout>

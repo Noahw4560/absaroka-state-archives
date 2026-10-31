@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+import { withBase } from '../lib/records';
+const { title = 'The Absaroka State Archives', description = 'The political record of Absaroka: people, legislation, events and original documents.' } = Astro.props;
+const navigation = [
+  {label:'Front page',path:'/'},
+  {label:'Government',path:'/government/'},
+  {label:'People',path:'/people/'},
+  {label:'Organizations',path:'/organizations/'},
+  {label:'Legislation',path:'/legislation/'},
+  {label:'Archives',path:'/archive/'},
+  {label:'Timeline',path:'/timeline/'},
+  {label:'Search',path:'/search/'},
+];
+const current = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#263849" />
+  <meta name="description" content={description} />
+  <title>{title === 'The Absaroka State Archives' ? title : `${title} | The Absaroka State Archives`}</title>
+  <link rel="icon" type="image/svg+xml" href={withBase('/seal.svg')} />
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="site-shell">
+    <header>
+      <div class="site-top"><div class="container">
+        <span class="micro">State of Absaroka · Est. 1848</span>
+        <div class="utility"><span>Public historical register</span><a href="https://app.pagescms.org/" target="_blank" rel="noopener noreferrer" title="Private editor; requires GitHub authorization">Editor ↗</a></div>
+      </div></div>
+      <div class="masthead"><div class="container masthead-inner">
+        <img class="crest" src={withBase('/seal.svg')} alt="Absaroka archive crest" width="68" height="68" />
+        <a class="brand" href={withBase('/')}>Absaroka State Archives<span>THE RECORD OF A REPUBLIC</span></a>
+      </div></div>
+      <nav class="main-nav" aria-label="Primary navigation"><div class="container nav-inner">
+        <button class="nav-toggle" type="button" aria-controls="primary-links" aria-expanded="false">☰ &nbsp; Browse the archive</button>
+        <div id="primary-links" class="nav-links">
+          {navigation.map(n => <a href={withBase(n.path)} aria-current={current === withBase(n.path) ? 'page' : undefined}>{n.label}</a>)}
+        </div>
+      </div></nav>
+    </header>
+    <main class="site-main" id="main"><slot /></main>
+    <footer class="footer"><div class="container">
+      <div class="footer-top">
+        <div><div class="footer-brand">Absaroka State Archives</div><p>An independent, fan-made historical record of the Absaroka RedM roleplay setting. Records represent in-character claims and published documents; this is not a real government website.</p></div>
+        <div class="footer-links"><a href={withBase('/archive/')}>All records</a><a href={withBase('/search/')}>Search</a><a href={withBase('/about/')}>About & sourcing</a><a href="https://app.pagescms.org/" target="_blank" rel="noopener noreferrer">Editors ↗</a></div>
+      </div>
+      <div class="footer-bottom">© Absaroka fan archive · Historical setting 1920–1923 · Fictional world / roleplay project</div>
+    </div></footer>
+  </div>
+  <script is:inline>
+    const menu = document.querySelector('.nav-toggle');
+    const links = document.getElementById('primary-links');
+    menu?.addEventListener('click', () => { const open = links?.getAttribute('data-open') !== 'true'; links?.setAttribute('data-open', String(open)); menu.setAttribute('aria-expanded', String(open)); });
+  </script>
+  <script is:inline define:vars={{base}}>
+    // Pages CMS stores media URLs as /media/; project GitHub Pages sites live beneath /repo/.
+    if(base !== '/') document.querySelectorAll('.prose img[src^="/media/"], .prose a[href^="/media/"]').forEach(node => { const key = node.tagName === 'IMG' ? 'src' : 'href'; node.setAttribute(key, base.replace(/\/$/, '') + node.getAttribute(key)); });
+  </script>
+</body>
+</html>

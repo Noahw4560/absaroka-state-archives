@@ -1,0 +1,49 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import RecordCard from '../components/RecordCard.astro';
+import { allRecords, recordsFor, recordLink, withBase } from '../lib/records';
+const all = await allRecords();
+const publications = await recordsFor('publications');
+const featured = publications.find(e => e.data.featured) || publications[0];
+const secondary = publications.filter(e => e.id !== featured?.id).slice(0,4);
+const recent = all.filter(e=> e.section !== 'people').slice(0,6);
+const counts = [
+  ['People',(await recordsFor('people')).length],
+  ['Organizations',(await recordsFor('organizations')).length],
+  ['Publications',publications.length],
+  ['Legislation',(await recordsFor('legislation')).length],
+  ['Events',(await recordsFor('events')).length]
+];
+---
+<SiteLayout>
+<section class="hero"><div class="container">
+  <div class="micro hero-kicker eyebrow">Independent archival project · Government, Politics & History</div>
+  <h1 class="hero-title">The record of a <em>changing</em> republic.</h1>
+  <p class="hero-sub">From the halls of the State Senate to the frontier towns of New Austin, explore the people, policies, and public disputes shaping Absaroka's story.</p>
+  <div class="decor-rule">✦</div>
+  <div class="issue-line"><span>Established 1848</span><span>✧</span><span>Historical record 1920–1923</span><span>✧</span><span>Open to the public</span></div>
+  <div class="stats-row">{counts.map(([name,n])=><div class="stat"><strong>{n}</strong><span>{name}</span></div>)}</div>
+</div></section>
+<section class="section"><div class="container">
+  <div class="section-title"><h2>From the public record</h2><a href={withBase('/archive/')}>Browse all records →</a></div>
+  <div class="leading-grid">
+    {featured && <div class="feature-story">
+      <a href={recordLink('publications',featured.id)}><img class="poster-img" src={withBase(featured.data.image || '/seal.svg')} alt={featured.data.title} /></a>
+      <div><div class="story-meta">Featured dispatch · {featured.data.dateLabel}</div><h3 class="story-title">{featured.data.title}</h3><p class="story-excerpt">{featured.data.summary}</p><a class="story-link" href={recordLink('publications',featured.id)}>Read original record</a></div>
+    </div>}
+    <aside><div class="sidebar-label">Other dispatches</div>{secondary.map(e=><div class="side-note"><div class="story-meta">{e.data.dateLabel}</div><h3><a href={recordLink('publications',e.id)}>{e.data.title}</a></h3><p>{e.data.summary}</p></div>)}</aside>
+  </div>
+</div></section>
+<section class="section" style="background:rgba(255,250,236,.42);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)"><div class="container">
+  <div class="section-title"><h2>Open the archives</h2><a href={withBase('/search/')}>Search the whole collection →</a></div>
+  <div class="cards">
+    <div class="record-card"><div class="card-content"><span class="story-meta">I · Government</span><h3 class="card-title"><a href={withBase('/government/')}>The State & Its Officers</a></h3><p>Browse a dated government roster, Senate districts, public offices, and historical transitions.</p><div class="card-bottom"><span class="status official">Official snapshot</span><a href={withBase('/government/')}>View roster →</a></div></div></div>
+    <div class="record-card"><div class="card-content"><span class="story-meta">II · Legislation</span><h3 class="card-title"><a href={withBase('/legislation/')}>Acts, Bills & Resolutions</a></h3><p>Review legislative proposals with clear distinctions between introduced, reported, and enacted measures.</p><div class="card-bottom"><span class="status">Legislative records</span><a href={withBase('/legislation/')}>Read acts →</a></div></div></div>
+    <div class="record-card"><div class="card-content"><span class="story-meta">III · History</span><h3 class="card-title"><a href={withBase('/timeline/')}>The Passage of Time</a></h3><p>Trace the recession, political appointments, border debates, and statements across in-character dates.</p><div class="card-bottom"><span class="status">Chronological</span><a href={withBase('/timeline/')}>View timeline →</a></div></div></div>
+  </div>
+</div></section>
+<section class="section"><div class="container">
+  <div class="section-title"><h2>Recently entered records</h2><a href={withBase('/archive/')}>Complete index →</a></div>
+  <div class="cards">{recent.map(r=><RecordCard section={r.section} entry={r.entry} />)}</div>
+</div></section>
+</SiteLayout>

@@ -1,0 +1,8 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import RecordCard from '../components/RecordCard.astro';
+import { recordsFor } from '../lib/records';
+const people=await recordsFor('people');
+---
+<SiteLayout title="Public figures"><PageHeading kicker="Biographical register" title="The people of Absaroka" description="Legislators, mayors, governors, organizers, journalists and private citizens documented in the political history of the state." /><section class="section"><div class="container"><div class="cards">{people.map(entry=><RecordCard section="people" entry={entry}/>)}</div></div></section></SiteLayout>

@@ -1,0 +1,10 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { recordsFor, recordLink, STATUS_LABELS } from '../lib/records';
+const records=await recordsFor('legislation');
+---
+<SiteLayout title="Laws and resolutions"><PageHeading kicker="The legislative register" title="Bills, acts & resolutions" description="A working catalog of measures mentioned in available records. Titles appearing in speeches are not automatically proof that a bill passed." />
+<section class="section"><div class="container"><div class="callout"><strong>Legislative status warning</strong><p>Some measure titles are known only from speeches or secondary accounts. A missing roll-call vote or signed law remains unverified; this archive does not silently convert a proposal into legislation.</p></div>
+{records.map(entry=><article class="archive-row"><div class="record-date">{entry.data.dateLabel}</div><div><h3><a href={recordLink('legislation',entry.id)}>{entry.data.title}</a></h3><p>{entry.data.summary}</p></div><div class="archive-end">{STATUS_LABELS[entry.data.recordStatus]}</div></article>)}
+</div></section></SiteLayout>

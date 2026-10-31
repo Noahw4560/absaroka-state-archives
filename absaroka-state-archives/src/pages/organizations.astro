@@ -1,0 +1,8 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import RecordCard from '../components/RecordCard.astro';
+import { recordsFor } from '../lib/records';
+const records=await recordsFor('organizations');
+---
+<SiteLayout title="Parties and associations"><PageHeading kicker="Associations" title="Parties & organizations" description="Political organizations, labor associations, revolutionary movements and other groups appearing in public Absaroka sources."/><section class="section"><div class="container"><div class="cards">{records.map(entry=><RecordCard section="organizations" entry={entry}/>)}</div></div></section></SiteLayout>
